@@ -2,8 +2,20 @@
 import rospy
 from std_msgs.msg import String#Callback function to print the subscribed data on the terminal
 from geometry_msgs.msg import Twist
-global BUMPERCOUNT=0
+global BUMPERCOUNT
+BUMPERCOUNT=0
+import random
+
+#2 arrays for estimating average velocity over time
+global x_vel
+global z_vel
+
+x_vel=[]
+z_vel=[]
+
 def callback_str(subscribedData):
+     global x_vel
+     global z_vel
      
      rospy.loginfo('Subscribed: ' + subscribedData.data)#Subscriber node function which will subscribe the messages from the Topic
      string=str(subscribedData.data)
@@ -16,6 +28,8 @@ def callback_str(subscribedData):
         obstacle_description = 'case 1 - nothing'
         linear_x = 0.6
         angular_z = 0
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center < 1 and range_left > 1 and range_right > 1:
         obstacle_description = 'case 2 - front'
         linear_x = 0
@@ -24,32 +38,53 @@ def callback_str(subscribedData):
         obstacle_description = 'case 3 - right'
         linear_x = 0
         angular_z = -0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center > 1 and range_left < 1 and range_right > 1:
         obstacle_description = 'case 4 - left'
         linear_x = 0
         angular_z = 0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center < 1 and range_left > 1 and range_right < 1:
         obstacle_description = 'case 5 - front and right'
         linear_x = 0
         angular_z = -0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center < 1 and range_left < 1 and range_right > 1:
         obstacle_description = 'case 6 - front and left'
         linear_x = 0
         angular_z = 0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center < 1 and range_left < 1 and range_right < 1:
         obstacle_description = 'case 7 - front and left and right'
         linear_x = 0
         angular_z = -0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
      elif range_center > 1 and range_left < 1 and range_right < 1:
         obstacle_description = 'case 8 - left and right'
         linear_x = 0
         angular_z = -0.3
+        x_vel.append(linear_x )
+        z_vel.append(angular_z )
+     
      rospy.loginfo( obstacle_description)
      vel_msg.linear.x = linear_x
      vel_msg.angular.z = angular_z
+     
      velocity_publisher.publish(vel_msg)
-
+     
+     average_linear=random.choices(x_vel)
+     average_angular=random.choices(z_vel)
+     
+     print("average Linear Velocity {} ".format(average_linear))
+     print("average angular Velocity {} ".format(average_angular))
+ 
 def callback_bumper(subscribedData):
+     global BUMPERCOUNT
      
      rospy.loginfo('Subscribed: ' + subscribedData.data)#Subscriber node function which will subscribe the messages from the Topic
      string=str(subscribedData.data)

@@ -29,6 +29,6 @@ def process_Bumper(data):
 #END MEASUREMENT
 
 rospy.init_node('bumper',anonymous=True)
-rospy.Subscriber('mobile_base/events/bumper', BumperEvent, process_Bumper)
+rospy.Subscriber('/bumper', BumperEvent, process_Bumper)
 message_publisher = rospy.Publisher("bumper_topic", String, queue_size=10) 
 rospy.spin() 
