@@ -16,10 +16,10 @@ The robot's behavior is based on a reflex-based controller that consists of two 
 
 
 ![Image 2](https://github.com/shakibaam/Robot-Final/blob/master/maze-like%20scenario.png)
-*Maze-like scenario*
+
 
 ![Image 1](https://github.com/shakibaam/Robot-Final/blob/master/feasible%20maze%20path.png)
-*Feasible maze path*
+
 
 
 
